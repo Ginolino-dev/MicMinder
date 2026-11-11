@@ -1,5 +1,12 @@
 # Release notes
 
+## 1.1.7 — testing release
+
+- Bound Automation-permission waits so an unresponsive macOS permission service cannot indefinitely block the menu or setup checks.
+- Show unavailable permission feedback and a System Settings action instead of leaving both players on Checking permission.
+- Keep a bounded number of outstanding permission workers and never cache completed authorization results.
+- Standalone timeout/recovery regression passed; the full XCTest suite is currently blocked by missing XCTest in the installed Command Line Tools. The user confirmed playback works after restarting the Mac; this does not establish that MicMinder caused or resolved the macOS service hang.
+
 ## 1.1.6
 
 - Reduce locally measured sustained microphone-active CPU from 4.16% to 2.98% of one core; see [performance results](docs/PERFORMANCE.md) for methodology and limits.

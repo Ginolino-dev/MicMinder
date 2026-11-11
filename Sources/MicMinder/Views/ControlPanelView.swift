@@ -9,7 +9,7 @@ struct PlayerSwitchRows: View {
         HStack {
           VStack(alignment: .leading, spacing: 3) {
             Text(player.bundleIdentifier == "com.apple.Music" ? "Apple Music" : "Spotify").font(.system(size: 13, weight: .medium))
-            Text(status == nil ? "Checking permission…" : connections.requesting == player.bundleIdentifier ? "Connecting…" : status?.denied == true ? "Permission needed · opens System Settings" : status?.authorized == true ? (status?.enabled == true ? "Connected" : "Control off") : "Enable playback control")
+            Text(status == nil ? "Checking permission…" : connections.requesting == player.bundleIdentifier ? "Connecting…" : status?.unavailable == true ? "macOS isn’t responding · opens System Settings" : status?.denied == true ? "Permission needed · opens System Settings" : status?.authorized == true ? (status?.enabled == true ? "Connected" : "Control off") : "Enable playback control")
               .font(.system(size: 11)).foregroundStyle(.secondary)
           }
           Spacer(minLength: 12)

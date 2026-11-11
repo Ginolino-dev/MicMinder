@@ -6,6 +6,7 @@ final class PlayerConnectionModel: ObservableObject {
     var authorized: Bool
     var enabled: Bool
     var denied: Bool
+    var unavailable: Bool = false
   }
   @Published private(set) var statuses: [String: Status] = [:]
   @Published private(set) var requesting: String?
@@ -15,8 +16,8 @@ final class PlayerConnectionModel: ObservableObject {
   private var timer: Timer?
   private var observers = 0
   private let appModel: AppModel
-  private let query: (ScriptableMediaPlayer) -> (authorized: Bool, denied: Bool)
-  init(appModel: AppModel, query: @escaping (ScriptableMediaPlayer) -> (authorized: Bool, denied: Bool) = { PermissionAuthorizationService.connectionStatus(for: $0) }) {
+  private let query: (ScriptableMediaPlayer) -> (authorized: Bool, denied: Bool, unavailable: Bool)
+  init(appModel: AppModel, query: @escaping (ScriptableMediaPlayer) -> (authorized: Bool, denied: Bool, unavailable: Bool) = { PermissionAuthorizationService.connectionStatus(for: $0) }) {
     self.appModel = appModel; self.query = query
   }
   func start() {
@@ -36,7 +37,7 @@ final class PlayerConnectionModel: ObservableObject {
       var updated: [String: Status] = [:]
       for player in PermissionAuthorizationService.setupPlayers {
         let result = query(player)
-        updated[player.bundleIdentifier] = Status(authorized: result.authorized, enabled: true, denied: result.denied)
+        updated[player.bundleIdentifier] = Status(authorized: result.authorized, enabled: true, denied: result.denied, unavailable: result.unavailable)
       }
       DispatchQueue.main.async {
         guard let self else { return }
@@ -66,6 +67,10 @@ final class PlayerConnectionModel: ObservableObject {
       updateSetting(true, player: player)
       appModel.refresh(); refresh(); return
     }
+    if statuses[player.bundleIdentifier]?.unavailable == true {
+      errorMessage = "macOS isn’t answering permission checks. Check Automation in System Settings. If this persists, restart your Mac and reopen MicMinder."
+      PermissionAuthorizationService.openSettings(); return
+    }
     if statuses[player.bundleIdentifier]?.denied == true {
       PermissionAuthorizationService.openSettings(); return
     }
@@ -77,7 +82,7 @@ final class PlayerConnectionModel: ObservableObject {
           guard let self else { return }
           self.updateSetting(granted, player: player)
           self.requesting = nil
-          if !granted { self.errorMessage = "Permission wasn’t granted. You can try again in System Settings." }
+          if !granted { self.errorMessage = "Permission wasn’t confirmed. Check System Settings; if you just allowed access, wait for the connection status to refresh." }
           self.appModel.refresh(); self.refresh()
         }
       }

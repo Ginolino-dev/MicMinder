@@ -21,9 +21,9 @@ MicMinder is a small macOS menu bar app that automatically pauses your music whe
 
 ## Current version and availability
 
-The current version is **1.1.6**, with a compact native Apple popover, adaptive appearance and custom note-and-pause icon. Apple Music and Spotify were retested with the installed 1.1.6 build; playback logs confirmed fade-out, pause, resume and fade-in. All 54 automated regression tests pass.
+The current version is **1.1.7**, with a compact native Apple popover, adaptive appearance and custom note-and-pause icon. Apple Music and Spotify were retested with the installed 1.1.7 build; playback logs confirmed fade-out, pause, resume and fade-in. The previous release passed 54 automated tests. For 1.1.7, the standalone permission-timeout regression passed and playback was manually confirmed after a Mac restart; the full XCTest suite could not run with the currently installed Command Line Tools.
 
-Download **1.1.6 for Apple Silicon Macs (M1 or later)** from [GitHub Releases](https://github.com/Ginolino-dev/MicMinder/releases/tag/v1.1.6). Requires macOS 14 or later. An Intel build is not included.
+Download **1.1.7 for Apple Silicon Macs (M1 or later)** from [GitHub Releases](https://github.com/Ginolino-dev/MicMinder/releases/tag/v1.1.7). Requires macOS 14 or later. An Intel build is not included.
 
 This initial testing release uses ad hoc signing and is **not Developer ID signed or notarized**. After downloading, unzip it, move MicMinder to Applications, and open it. If macOS blocks it, use **System Settings → Privacy & Security → Open Anyway** after attempting to open it, only if you trust this download. Do not disable Gatekeeper. A SHA-256 checksum is included with the release.
 
@@ -74,7 +74,7 @@ Running the app requires **macOS 14 or later**. Building requires Xcode 26 or la
 ```bash
 git clone https://github.com/Ginolino-dev/MicMinder.git
 cd MicMinder
-BUILD_CONFIGURATION=release APP_VERSION=1.1.6 APP_BUILD_NUMBER=9 ./scripts/build_and_run.sh --package
+BUILD_CONFIGURATION=release APP_VERSION=1.1.7 APP_BUILD_NUMBER=10 ./scripts/build_and_run.sh --package
 ```
 
 Copy `dist/MicMinder.app` to Applications and open that copy. The bundle contains its executable, icon, and interface resources, so it runs independently of the source checkout and build caches. Enable Launch at Login from the installed copy.
